@@ -2,7 +2,7 @@ import multiprocessing
 import numpy as np
 import os
 import pandas as pd
-import mcstats
+from . import mcstats
 import pandas
 from typing import List
 
