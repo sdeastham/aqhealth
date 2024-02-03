@@ -456,9 +456,12 @@ def read_who_data(who_by_country_xls=None,who_by_region_xls=None,as_rates=False)
     who_data = {}
     for age_code in ['0-4','5-14','15-29','30-49','50-59','60-69','70+']:
         # Get by-country first
+        #who_xls = pandas.read_excel(who_by_country_xls,
+        #                            sheet_name='Deaths ' + age_code,
+        #                            header=7,usecols=[0,1] + list(range(7,1000)))
         who_xls = pandas.read_excel(who_by_country_xls,
                                     sheet_name='Deaths ' + age_code,
-                                    header=7,usecols=[0,1] + list(range(7,1000)))
+                                    header=7)
         # Rename the columns
         who_xls = who_xls.rename(columns={'Unnamed: 0': 'Sex', 'Unnamed: 1': 'GHE Code'})
         # Keep only the unisex data
@@ -476,9 +479,12 @@ def read_who_data(who_by_country_xls=None,who_by_region_xls=None,as_rates=False)
 
     # Now read in regional data
     for reg in ['Afr','Amr','Sear','Eur','Emr','Wpr','Global']:
+        #who_xls = pandas.read_excel(who_by_region_xls,
+        #                    sheet_name='2016 ' + reg,
+        #                    header=7,usecols=[0] + list(range(9,1000)))
         who_xls = pandas.read_excel(who_by_region_xls,
                             sheet_name='2016 ' + reg,
-                            header=7,usecols=[0] + list(range(9,1000)))
+                            header=7)
         who_xls = who_xls.rename(columns={'Unnamed: 0': 'GHE Code'})
         who_xls = who_xls.drop(index=[1,2]).reset_index(drop=True)
         
