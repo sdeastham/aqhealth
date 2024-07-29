@@ -770,7 +770,7 @@ def calc_mortality(chi_data, ref_map, common_chi_grid, ERF_set, GPW_dir, WHO_dir
     var_name = 'UN WPP-Adjusted Population Density, v4.11 (2000, 2005, 2010, 2015, 2020): 2.5 arc-minutes'
     ds_GPW = netCDF4.Dataset(os.path.join(GPW_dir,'gpw_v4_population_density_adjusted_rev11_2pt5_min.nc'),'r')
     hrz_grid_GPW = latlontools.gen_grid(lon_stride=360/8640,lat_stride=180/4320,half_polar=False,center_180=False)
-    cid_grid = (np.flip(ds_GPW[var_name][10,:,:],axis=0)).astype(np.int)
+    cid_grid = (np.flip(ds_GPW[var_name][10,:,:],axis=0)).astype(int)
     # Convert from people per m2 of land to just "people" (NB: entry 3 is the GPWv4 2015 estimate)
     pop_grid  = np.double(np.flip(ds_GPW[var_name][3,:,:],axis=0)).filled(0.0) * 1.0e-6 # Convert from ppl/km2 to ppl/m2
     land_grid = np.double(np.flip(ds_GPW[var_name][8,:,:],axis=0)).filled(0.0) * 1.0e6  # Convert from km2 to m2
