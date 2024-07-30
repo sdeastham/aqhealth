@@ -806,16 +806,19 @@ def calc_mortality(chi_data, ref_map, common_chi_grid, ERF_set, GPW_dir, WHO_dir
     if verbose:
         print('Regridding exposure data to population grid')
     pop_to_chi_regrid = None
+    chi_data_on_gpw_grid = {}
     for scen in chi_data.keys():
+        chi_data_on_gpw_grid[scen] = {}
         if pop_to_chi_regrid is None or not common_chi_grid:
             pop_to_chi_regrid = regrid.gen_regridder(chi_data[scen]['grid'],hrz_grid_GPW)
         for ef in chi_data[scen].keys():
             if ef == 'grid':
+                chi_data_on_gpw_grid[scen][ef] = chi_data[scen][ef]
                 continue
             data_used = False
             for ERF in ERF_set:
                 data_used = data_used or ef == ERF.exposure_factor
-            chi_data[scen][ef] = pop_to_chi_regrid(chi_data[scen][ef])
+            chi_data_on_gpw_grid[scen][ef] = pop_to_chi_regrid(chi_data[scen][ef])
     
     # Data to be stored: baseline and policy mortality for each ERF and each country
     n_erf = len(ERF_set)
@@ -871,7 +874,7 @@ def calc_mortality(chi_data, ref_map, common_chi_grid, ERF_set, GPW_dir, WHO_dir
     
     # ERF_set links to the same objects as param_dict, so can ignore p_d in the call
     targ_fn = lambda p_d, i_batch, batch_size : run_sim_batch(ERF_set, country_names, who_age_ceilings, pop_grid, cid_grid, unique_cids,
-                                                              who_data, GPW_to_WHO, chi_data, ref_map, i_batch=i_batch, n_per_batch=batch_size,
+                                                              who_data, GPW_to_WHO, chi_data_on_gpw_grid, ref_map, i_batch=i_batch, n_per_batch=batch_size,
                                                               n_draws=n_rand, regionid_grid=regionid_grid,regionid_list=regionid_list,
                                                               region_names=region_names,verbose=True,n_cpus=n_cpus)
     output_list, timing_data = mcstats.run_mc(targ_fn, param_dict, n_rand, rng_opts=rng_opts,
