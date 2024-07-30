@@ -75,11 +75,11 @@ def worker_calc(i_in_batch):
     baseline_incidence = np.frombuffer(var_dict['baseline_incidence'])
     pop_grid_dbl       = np.frombuffer(var_dict['pop_grid'])
     chi_delta_raw      = np.frombuffer(var_dict['chi_delta_raw'])
-    cid_grid           = np.frombuffer(var_dict['cid_grid']).astype(np.int)
+    cid_grid           = np.frombuffer(var_dict['cid_grid']).astype(int)
     # Masks of subregions (dimensions of cid_grid)
     get_regions = n_region > 0
     if get_regions:
-        region_masks   = np.frombuffer(var_dict['region_masks']).astype(np.int)
+        region_masks   = np.frombuffer(var_dict['region_masks']).astype(int)
     
 
     i_draw = i_in_batch + (i_batch*n_per_batch)
@@ -837,7 +837,7 @@ def calc_mortality(chi_data, ref_map, common_chi_grid, ERF_set, GPW_dir, WHO_dir
         try:
             state_list = [x for x in state_mask_nc.variables.keys() if x not in state_mask_nc.dimensions]
             n_states = len(state_list)
-            regionid_grid = np.zeros(cid_grid.shape,np.int)
+            regionid_grid = np.zeros(cid_grid.shape,int)
             regionid_list = [[]] * n_country
             region_names = [[]] * n_country
             i_US = country_names.tolist().index('United States of America')
@@ -851,7 +851,7 @@ def calc_mortality(chi_data, ref_map, common_chi_grid, ERF_set, GPW_dir, WHO_dir
         finally:
             state_mask_nc.close()
     else:
-        regionid_grid = np.zeros((1,1),np.int)
+        regionid_grid = np.zeros((1,1),int)
         regionid_list = None
         region_names  = None
    
